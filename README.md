@@ -1,0 +1,2 @@
+# Sinatch
+Sinatch'nin websitesidir.
