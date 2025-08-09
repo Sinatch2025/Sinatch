@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>Sahne Arka Planı Blokları</title>
+<style>
+  #scene {
+    width: 600px; height: 400px; border: 3px solid #2c3e50;
+    border-radius: 10px; margin-bottom: 20px;
+    background-size: cover;
+    background-position: center;
+  }
+  #controls {
+    max-width: 600px;
+    background: #ecf0f1;
+    padding: 10px;
+    border-radius: 6px;
+  }
+  button, select {
+    width: 100%; margin: 5px 0; padding: 8px; border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+</style>
+</head>
+<body>
+
+<h2>Sahne Arka Planı Blokları Demo</h2>
+<div id="scene"></div>
+
+<div id="controls">
+  <label for="bgSelect">Arka Plan Seç:</label>
+  <select id="bgSelect"></select>
+
+  <button id="btnSetBg">Arka Planı Ayarla</button>
+  <button id="btnNextBg">Sonraki Arka Plan</button>
+  <button id="btnPrevBg">Önceki Arka Plan</button>
+  <button id="btnCountBg">Arka Plan Sayısını Göster</button>
+
+  <div id="output"></div>
+</div>
+
+<script>
+  const scene = document.getElementById("scene");
+  const bgSelect = document.getElementById("bgSelect");
+  const output = document.getElementById("output");
+
+  const backgrounds = [
+    "https://i.imgur.com/qS1dh8M.jpg",
+    "https://i.imgur.com/UpzXtV1.jpg",
+    "https://i.imgur.com/f74qhVN.jpg"
+  ];
+  let currentBgIndex = 0;
+
+  function renderBackground() {
+    scene.style.backgroundImage = `url('${backgrounds[currentBgIndex]}')`;
+  }
+
+  function setBackground(index) {
+    if(index < 0 || index >= backgrounds.length) return;
+    currentBgIndex = index;
+    renderBackground();
+    output.textContent = `Arka plan ${currentBgIndex + 1} olarak ayarlandı.`;
+    bgSelect.value = currentBgIndex;
+  }
+
+  function nextBackground() {
+    currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+    renderBackground();
+    output.textContent = "Sonraki arka plana geçildi.";
+    bgSelect.value = currentBgIndex;
+  }
+
+  function prevBackground() {
+    currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+    renderBackground();
+    output.textContent = "Önceki arka plana geçildi.";
+    bgSelect.value = currentBgIndex;
+  }
+
+  function getBackgroundCount() {
+    return backgrounds.length;
+  }
+
+  // Seçenekleri doldur
+  function populateBgSelect() {
+    bgSelect.innerHTML = "";
+    backgrounds.forEach((bg, i) => {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = `Arka Plan ${i + 1}`;
+      bgSelect.appendChild(option);
+    });
+  }
+
+  // Eventler
+  document.getElementById("btnSetBg").addEventListener("click", () => {
+    setBackground(parseInt(bgSelect.value));
+  });
+  document.getElementById("btnNextBg").addEventListener("click", () => {
+    nextBackground();
+  });
+  document.getElementById("btnPrevBg").addEventListener("click", () => {
+    prevBackground();
+  });
+  document.getElementById("btnCountBg").addEventListener("click", () => {
+    output.textContent = `Arka plan sayısı: ${getBackgroundCount()}`;
+  });
+
+  // İlk render ve seçenek yükleme
+  populateBgSelect();
+  setBackground(0);
+
+</script>
+
+</body>
+</html>
